@@ -22,15 +22,7 @@ IMG.me {
 #head h1 {
   margin-top: 100px;
   color: black;
-  letter-spacing: -3px;
-  font-size: 50px;
-  font-weight: 500;
-}
-
-#head h2 {
-  font-size: 50px;
-  margin-top: 0px;
-  font-weight: 100;
+  letter-spacing: -5px;
 }
 
 #description {
@@ -41,5 +33,4 @@ IMG.me {
 
 .container a {   
   color: #0da0ee;
-  font-weight: 500;
 }
