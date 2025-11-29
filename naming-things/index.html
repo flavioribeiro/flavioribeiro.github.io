@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+    
+    <title>Naming Things</title>
+    <meta name="description" content="" />
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="MobileOptimized" content="320" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    
+    <link rel="stylesheet" type="text/css" href="/assets/css/screen.css" />
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic|Open+Sans:700,400" />
+
+    
+    <meta name="generator" content="Ghost 0.3" />
+<link rel="alternate" type="application/rss+xml" title="RSS" href="/rss/">
+</head>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-46289775-1', 'flavioribeiro.com');
+  ga('send', 'pageview');
+
+</script>
+<body class="post-template tag-development tag-clean-code-2 tag-good-names">
+
+    
+    
+
+
+
+<main class="content" role="main">
+
+    <article class="post tag-development tag-clean-code-2 tag-good-names">
+
+        
+        <header class="post-header">
+            <a id="blog-logo" href="http://blog.flavioribeiro.com">
+                
+                    <img src="/content/images/2015/Dec/logo.png" alt="Blog Logo" />
+                
+            </a>
+        </header>
+
+        
+        
+
+        
+        <span class="post-meta"><time datetime="2013-12-14">14 Dec 2013</time> on development |  clean code  | good names</span>
+
+        <h1 class="post-title">Naming Things</h1>
+
+        <section class="post-content">
+            <blockquote>
+  <p>There are only two hard things in Computer Science: cache invalidation and naming things.</p>
+  
+  <p><em>Phil Karlton</em></p>
+</blockquote>
+
+<p>I was thinking about how important naming things is to me. Since the beginning of my undergraduate studies, I paid close attention to the names of every project I've done and every company or lab that I've worked at.</p>
+
+<p>I'm also catching myself arguing about the name of things on my daily work and I was able to notice how bad I am at it. This post aims on forcing me to improve my <em>naming things skill</em>.</p>
+
+<h4 id="regardingprojectnames">Regarding Project names</h4>
+
+<p>The last project we did at <a href="http://globo.com">Globo.com</a> had a good name. It's called <em>Sauron</em>, and it's main purpose is to collect and show server's health, QoS/QoE analysis, handle video signals, network throughput, etc. It fits well as <em>Sauron</em> represents himself as an <a href="http://lotr.wikia.com/wiki/Sauron">all seeing eye</a>. It's short, compact, nerdy, and I like it. </p>
+
+<p>But we have a lot of bad names there: <em>Streams-analyzer</em>, <em>EvoHandler</em> and <em>VMine</em> are just some of then that are too vague or don't really explain what they do (sorry coworkers, don't take it personally).</p>
+
+<p>My undergraduate project was called <a href="http://www.plugmasters.com.br/plugfeed/post/12241/marmota-making-arduino-and-mobile-devices-talk">Marmota</a>, an acronym for <strong>ma</strong>king <strong>ar</strong>duino and <strong>mo</strong>bile devices <strong>ta</strong>lk that forms the name of a <a href="http://pt.wikipedia.org/wiki/Marmota">funny animal</a> in Brazilian Portuguese. I don't know if anyone has looked at this fact, but I have no doubt that the name helped on its 15-minutes of fame <a href="https://code.google.com/p/marmota-windows-ce/source/checkout">[1]</a> <a href="http://mobideia.blogspot.com.br/2009/08/projeto-marmota-controle-carros-de.html">[2]</a> <a href="http://blogdoje.com.br/2009/08/28/projeto-marmota/">[3]</a> <a href="http://www.youtube.com/watch?v=1eNJYVT1LQ4">[4]</a> <a href="http://web.archive.org/web/20091217074102/http://marmota.mobi/">[5]</a>.</p>
+
+<p>Now I'm trying to engage myself on <a href="http://bem.tv">bem.tv</a>, an attempt to scale live video streaming using P2P. Actually, <a href="http://bem.tv">bem.tv</a> is another joke with a <a href="http://pt.wikipedia.org/wiki/Bem-te-vi">bird name</a> and <em>TV</em> suffix, which refers to video broadcast. It's small, simple and easy to say. </p>
+
+<p>Just to name other cool project names that aren't associated to animals but are good ones: <a href="https://github.com/gabrielfalcao/HTTPretty">HTTPretty</a>, <a href="http://flask.pocoo.org/">Flask</a>, <a href="http://pypy.org/">PyPy</a>, <a href="http://www.chromium.org/spdy/spdy-whitepaper">Spdy</a>, <a href="http://bundler.io/">Bundle</a>, <a href="http://youtube.com">YouTube</a>.</p>
+
+<blockquote>
+  <p>Who would guess -- even amid its barrage of Super Bowl ads -- that Go Daddy is the name of an Internet domain registration site?</p>
+  
+  <p><a href="http://www.washingtonpost.com/wp-dyn/content/article/2007/11/27/AR2007112702321.html">Paul Farhi</a></p>
+</blockquote>
+
+<p>Yes, you must be thinking about the projects whose names make no sense but they're much bigger and successfull than the ones that I listed. I'm not here judging the formula of success. I'm just concluding that short, solid names that make associations with cool stuff and the project purpose itself is  a good formula. For me, a good logo as <a href="http://bower.io/">bower</a>, <a href="http://gruntjs.com">gruntjs</a> or <a href="http://yeoman.io/">yeoman</a> also adds value to the project.</p>
+
+<h4 id="regardingcode">Regarding code</h4>
+
+<p>Naming classes, functions and modules are even more complicated. At our office we work with code that interacts with multimedia, and it's common to deal with names that have more than one meaning. <em>Stream</em>, <em>Signal</em>, <em>Media</em> and <em>Bitrate</em> are constantly used in our codes, and those are a constant source of confusion. </p>
+
+<p>For now we don't have a solution for this, but <a href="http://en.wikipedia.org/wiki/Docstring">docstrings</a> on the code or a small meeting followed by a document describing the decisions and conventions should fix it. Since our projects are growing exponentially, perhaps it's time to schedule this reunion.</p>
+
+<p><a href="http://www.objectmentor.com/omTeam/martin_r.html">Uncle Bob's</a> <a href="http://www.amazon.com/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882">Clean Code</a> book have an entire chapter explaining names and how to use and improve it in your code. He defends that names must be pronounceable and searchable, and you as developer should avoid reader's to mentally translate names (avoid mental mapping). </p>
+
+<blockquote>
+  <p>Length is not a virtue in a name; clarity of expression is.</p>
+  
+  <p><a href="http://en.wikipedia.org/wiki/Rob_Pike">Rob Pike</a></p>
+</blockquote>
+
+<p>I agree that length isn't directly related to self-explanation, and a good trick is look at your language syntactic sugars to improve the readability on the context at where your variable name or function is being used. I'm sure you'll find something to enforce the name you chose.</p>
+
+<p>Once in a while, ask people outside your team to review your code before pushing it to master. They will ask questions that were obvious to you and your teammates, but will alert where you are using bad names. </p>
+
+<p>Outsiders have other context in mind, and their questions will probably improve your code design and names. It's like visual design, information architecture. 4, 6 or 8 eyes is always better than 2.</p>
+
+<p>More References:</p>
+
+<ul>
+<li><a href="http://manypies.paulmorriss.com/2008/04/names-are-important.html">Names Are Important</a></li>
+<li><a href="http://www.lysator.liu.se/c/pikestyle.html">Notes on Programming in C</a></li>
+<li><a href="http://www.plugmasters.com.br/plugfeed/post/12241/marmota-making-arduino-and-mobile-devices-talk">Marmota</a></li>
+<li><a href="http://unethicalblogger.com/2011/11/13/ten-poorly-chosen-gem-names.html">Ten Poorly chosen Ruby gem names</a></li>
+<li><a href="http://www.codinghorror.com/blog/2007/11/whats-in-a-project-name.html">What's in a project name?</a></li>
+<li><a href="http://operativewords.blogspot.com.br/2009/06/where-are-most-creative-names.html">Where are most creative names?</a></li>
+</ul>
+        </section>
+
+        <footer class="post-footer">
+
+            
+                <section class="author">
+                    <h4>Flávio Ribeiro</h4>
+                    <p>Brazilian Software Engineer, collector of vinyl figure toys and passionate about software development, open source, distributed systems and multimedia.</p>
+                </section>
+            
+
+            <section class="share">
+                <h4>Share this post</h4>
+                <a class="icon-twitter" href="http://twitter.com/share?text=Naming Things&url=http://blog.flavioribeiro.com/naming-things/"
+                    onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                    <span class="hidden">Twitter</span>
+                </a>
+                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.flavioribeiro.com/naming-things/"
+                    onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+                    <span class="hidden">Facebook</span>
+                </a>
+                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://blog.flavioribeiro.com/naming-things/"
+                   onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+                    <span class="hidden">Google+</span>
+                </a>
+            </section>
+
+        </footer>
+
+        
+<div><hr /></div>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  var disqus_identifier = '';
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </article>
+
+</main>
+
+
+    <footer class="site-footer">
+        <a class="subscribe icon-feed" href="http://blog.flavioribeiro.com/rss/"><span class="tooltip">Subscribe!</span></a>
+        <div class="inner">
+             <section class="social-networks">
+                <a href="http://twitter.com/flavioribeiro">
+                  <img src="https://raw.github.com/recarreira/all_about_you/master/images/icons/fc-webicon-twitter-m.png">
+                </a>
+                <a href="https://foursquare.com/flavioribeiro">
+                  <img src="https://raw.github.com/recarreira/all_about_you/master/images/icons/fc-webicon-foursquare-m.png">
+                </a>
+                <a href="http://br.linkedin.com/in/flavioribeiro">
+                  <img src="https://raw.github.com/recarreira/all_about_you/master/images/icons/fc-webicon-linkedin-m.png">
+                </a>
+                <a href="http://last.fm/user/flaviornb">
+                  <img src="https://raw.github.com/recarreira/all_about_you/master/images/icons/fc-webicon-lastfm-m.png">
+                </a>
+                <a href="http://www.slideshare.net/flavioribeiro/">
+                  <img src="https://raw.github.com/recarreira/all_about_you/master/images/icons/fc-webicon-slideshare-m.png">
+                </a>
+                <a href="http://google.com/+FlávioRibeiroBarbosa">
+                  <img src="https://raw.github.com/recarreira/all_about_you/master/images/icons/fc-webicon-googleplus-m.png">
+                </a>
+                <a href="http://github.com/flavioribeiro">
+                  <img src="https://raw.github.com/recarreira/all_about_you/master/images/icons/fc-webicon-github-m.png">
+                </a>
+                <a href="http://blog.flavioribeiro.com/rss">
+                  <img src="https://raw.github.com/recarreira/all_about_you/master/images/icons/fc-webicon-rss-m.png">
+                </a>
+
+              </section>
+             <section class="copyright">All content copyright <a href="/">Flávio Ribeiro</a> &copy; 2014 &bull; All rights reserved.</section>
+             <section class="poweredby">Proudly published with <a class="icon-ghost" href="http://ghost.org">Ghost</a></section>
+        </div>
+    </footer>
+
+    
+    <script src="/shared/vendor/jquery/jquery.js"></script>
+
+    
+    <script type="text/javascript" src="/assets/js/index.js"></script>
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+
+</body>
+<script type="text/javascript">
+    var disqus_shortname = 'blogflavioribeiro';
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+</html>

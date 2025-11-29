@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+    
+    <title>Disserting on Clappr: An extensible media player for the web</title>
+    <meta name="description" content="" />
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="MobileOptimized" content="320" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    
+    <link rel="stylesheet" type="text/css" href="/assets/css/screen.css" />
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic|Open+Sans:700,400" />
+
+    
+    <meta name="generator" content="Ghost 0.3" />
+<link rel="alternate" type="application/rss+xml" title="RSS" href="/rss/">
+</head>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-46289775-1', 'flavioribeiro.com');
+  ga('send', 'pageview');
+
+</script>
+<body class="post-template tag-open-source tag-video-player tag-clappr tag-globo-com">
+
+    
+    
+
+
+
+<main class="content" role="main">
+
+    <article class="post tag-open-source tag-video-player tag-clappr tag-globo-com">
+
+        
+        <header class="post-header">
+            <a id="blog-logo" href="http://blog.flavioribeiro.com">
+                
+                    <img src="/content/images/2015/Dec/logo.png" alt="Blog Logo" />
+                
+            </a>
+        </header>
+
+        
+        
+
+        
+        <span class="post-meta"><time datetime="2014-11-26">26 Nov 2014</time> on open source | video player | clappr | globo.com</span>
+
+        <h1 class="post-title">Disserting on Clappr: An extensible media player for the web</h1>
+
+        <section class="post-content">
+            <p>Motivated by <a href="http://leandromoreira.com.br">Leandro</a>, today I'm gonna write a bit about <a href="http://github.com/globocom/clappr">Clappr</a>, an open source media player for the web. If you're Brazilian or know portuguese, there's also some useful information at <a href="http://thiago.me">Thiago</a>'s <a href="https://speakerdeck.com/thiagopnts/o-alem">talk</a>. Actually, I will inadvertently and explicitly steal some data from it.</p>
+
+<h4 id="history">History</h4>
+
+<p>During the last 4 years at <a href="http://globo.com">Globo.com</a> there was no team focused specifically on the development of the video player. It was a monolithic flash component based on <a href="http://sourceforge.net/adobe/osmf/home/Home/">OSMF</a>, mainly designed for playing progressive download videos on on-demand scenarios and also cover live streams through <a href="http://en.wikipedia.org/wiki/Real_Time_Messaging_Protocol">RTMP</a> protocol. </p>
+
+<p><img src="/content/images/2014/Nov/Screenshot_2014_11_25_22_51_41.png" alt="Globo Player 2.0" />
+<center><em>Previous Globo.com player</em></center></p>
+
+<p>At the beginning things were good, but in the course of time, a <strong>lot</strong> of new features were added (like support for subtitles, advertisement, DRM, new streaming protocols, picture-in-picture, etc). Since there wasn't an official owner of the project and <a href="http://blog.codinghorror.com/the-noble-art-of-maintenance-programming/">maintenance programming is a dirty work</a>, we were building a wall with crooked bricks. Player tasks started to be faced with revulsion and pain. </p>
+
+<p>As the FIFA World Cup 2014 project came with a bunch of new requirements and knowing that our live video streaming stack was rebuilt (<a href="http://en.wikipedia.org/wiki/HTTP_Live_Streaming">HLS</a> in favor of RTMP), we decided to go against <a href="http://www.joelonsoftware.com/articles/fog0000000069.html">Joel</a> and bootstrap a brand new video player in order to support the requirements and improve the overall performance on serving the matches and upcoming transmissions. The idea was to favor the playback directly on html5 (with fallback to flash when necessary).</p>
+
+<h4 id="opensource">Open Source</h4>
+
+<p>At <a href="http://globo.com">Globo.com</a> we use hundreds of open source projects and when starting a project from scratch, we usually ask ourselves <em>Why not open source it?</em>. First, there's the motto of give something back to the community, but I personally believe that committing and pushing on <a href="http://github.com/flavioribeiro">Github</a>, put your code available to the world and maybe build a community around your baby acts like a fuel for your brain, pushes you to the limits of productivity.</p>
+
+<blockquote>
+  <p>Open source software acts like a fuel for your brain, pushes you to the limits of productivity.</p>
+</blockquote>
+
+<p>Since we are in times where video delivery is very heterogeneous between browsers and devices, we choose for a plug-ins based architecture, allowing us to provide almost everything as open source, except the components that interact with our internal infrastructure.</p>
+
+<p>Visit <a href="http://opensource.globo.com/en/">Globo.com Open Source</a> to see more open source projects maintained by my co-workers.</p>
+
+<h4 id="clapprarchitecture">Clappr Architecture</h4>
+
+<p><img src="/content/images/2014/Nov/clappr_architecture-1.jpg" alt="Clappr Architecture, First Meeting" />
+<center><em>Designing Clappr, you can see the full image <a href="http://cdn.bem.tv/clappr_architecture.jpg">here</a></em>.</center></p>
+
+<p>With <a href="http://en.wikipedia.org/wiki/Component-based_software_engineering">CBSE</a> in mind we could figure out that there were three different plug-in types:</p>
+
+<ul>
+<li><p><a href="https://github.com/globocom/clappr/tree/master/src/playbacks">Playback Plugins</a>: Responsible for playing a given source. When embedded, Clappr will  search through playback plugins until find one who <a href="https://github.com/globocom/clappr/blob/master/src/playbacks/html5_video/html5_video.js#L194">canPlay()</a> the source.</p></li>
+<li><p><a href="https://github.com/globocom/clappr/tree/master/src/plugins">Container Plugins</a>: Every playback is associated with a container. In most cases, only one container and a playback will be instantiated. It is inside containers that, guess what, the container plugins work. Some examples are the built-in <a href="https://github.com/globocom/clappr/tree/master/src/plugins/stats">stats</a> plugin that listen for playback events (buffering, bufferfull, play/pause, etc), the <a href="https://github.com/globocom/clappr/tree/master/src/plugins/spinner_three_bounce">spinner</a> and the <a href="https://github.com/globocom/clappr/tree/master/src/plugins/watermark">watermark</a>.</p></li>
+<li><p><a href="https://github.com/globocom/clappr/tree/master/src/plugins">Core Plugins</a>: These are the ones who control everything. Let's say you want two videos playing at the same time, the main one and one smaller at the corner, like a <a href="http://en.wikipedia.org/wiki/Picture-in-picture">picture-in-picture</a>. A core plugin is able to instantiate two containers with a playback plugin each, set the size of the secondary video and put it on a bigger z-index. </p></li>
+</ul>
+
+<p>There's also a bunch of built-in components, like the <a href="https://github.com/globocom/clappr/blob/master/src/components/mediator.js">Mediator</a> who is responsible for routing events between scopes (and even make the Flash ↔ JS bridge when necessary) and the <a href="https://github.com/globocom/clappr/blob/master/src/components/loader/loader.js">Loader</a> who manage to load all built-in and external plugins. Wat? External plugins?</p>
+
+<h4 id="externalplugins">External Plug-ins</h4>
+
+<p>It's not only possible but simple to create your own external plug-in. There's a <a href="http://github.com/globocom/generator-clappr-plugin">Clappr Plug-ins Generator</a> that will ask you the kind of plug-in you want to create and build the structure for you. I've used it to create <a href="http://blog.flavioribeiro.com/bemtv-hls-p2p-webrtc/">BemTV</a> plugins, the <a href="https://github.com/bemtv/clappr-p2phls-plugin">playback</a> and a <a href="https://github.com/bemtv/clappr-p2phls-stats-plugin">container plugin</a> to show peer-to-peer statistics. Globo.com has some proprietary plug-ins such as media control bar, thumb-on-seek and others.</p>
+
+<p><img src="/content/images/2014/Nov/06_player_multicamera-1.jpg" alt="Clappr with Globo.com Plugins" />
+<center><em>Clappr with some Globo.com proprietary  plugins used at World Cup</em></center></p>
+
+<h4 id="technology">Technology</h4>
+
+<ul>
+<li><a href="https://github.com/google/traceur-compiler">Traceur</a>: write code in EcmaScript 6</li>
+<li><a href="http://browserify.org/">Browserify</a>: create the bundle, require()</li>
+<li><a href="karma-runner.github.io">Karma</a>, <a href="http://sinonjs.org/">Sinon</a>, <a href="http://mochajs.org/">Mocha</a>: tests</li>
+<li><a href="http://gulpjs.com/">Gulpjs</a>: tasks (build, upload, etc)</li>
+</ul>
+
+<h4 id="currentstatus">Current Status</h4>
+
+<p>Clappr already <a href="https://github.com/globocom/clappr#formats-supported">supports</a> the mainstream formats and has some special features like DVR (travel in time on live streams). We're heading to <strong>1.0.0</strong> release, but first we need to create a decent documentation and landing page. Both are on the go. </p>
+
+<p>We tought that the architecture was so solid that it motivated us to bootstrap mobile versions of Clappr. We already created <a href="http://github.com/globocom/clappr-ios">iOS</a> and <a href="http://github.com/globocom/clappr-android">Android</a> repositories in case you want to follow our future progress.</p>
+
+<h4 id="contributing">Contributing</h4>
+
+<p>We are just <a href="https://github.com/globocom/clappr/graphs/contributors">three</a> commiters, but there are some <a href="https://github.com/globocom/clappr/labels/easy">easy</a> issues opened. If you felt encouraged in contributing, I'll be more than glad to help you. You can find us at <a href="http://groups.google.com/forum/#!forum/clappr">clappr discussion list</a> and I'm always online as flavioribeiro at freenode.</p>
+        </section>
+
+        <footer class="post-footer">
+
+            
+                <section class="author">
+                    <h4>Flávio Ribeiro</h4>
+                    <p>Brazilian Software Engineer, collector of vinyl figure toys and passionate about software development, open source, distributed systems and multimedia.</p>
+                </section>
+            
+
+            <section class="share">
+                <h4>Share this post</h4>
+                <a class="icon-twitter" href="http://twitter.com/share?text=Disserting on Clappr: An extensible media player for the web&url=http://blog.flavioribeiro.com/clappr-an-extensible-media-player-for-the-web/"
+                    onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                    <span class="hidden">Twitter</span>
+                </a>
+                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.flavioribeiro.com/clappr-an-extensible-media-player-for-the-web/"
+                    onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+                    <span class="hidden">Facebook</span>
+                </a>
+                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://blog.flavioribeiro.com/clappr-an-extensible-media-player-for-the-web/"
+                   onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+                    <span class="hidden">Google+</span>
+                </a>
+            </section>
+
+        </footer>
+
+        
+<div><hr /></div>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  var disqus_identifier = '';
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </article>
+
+</main>
+
+
+    <footer class="site-footer">
+        <a class="subscribe icon-feed" href="http://blog.flavioribeiro.com/rss/"><span class="tooltip">Subscribe!</span></a>
+        <div class="inner">
+             <section class="social-networks">
+                <a href="http://twitter.com/flavioribeiro">
+                  <img src="https://raw.github.com/recarreira/all_about_you/master/images/icons/fc-webicon-twitter-m.png">
+                </a>
+                <a href="https://foursquare.com/flavioribeiro">
+                  <img src="https://raw.github.com/recarreira/all_about_you/master/images/icons/fc-webicon-foursquare-m.png">
+                </a>
+                <a href="http://br.linkedin.com/in/flavioribeiro">
+                  <img src="https://raw.github.com/recarreira/all_about_you/master/images/icons/fc-webicon-linkedin-m.png">
+                </a>
+                <a href="http://last.fm/user/flaviornb">
+                  <img src="https://raw.github.com/recarreira/all_about_you/master/images/icons/fc-webicon-lastfm-m.png">
+                </a>
+                <a href="http://www.slideshare.net/flavioribeiro/">
+                  <img src="https://raw.github.com/recarreira/all_about_you/master/images/icons/fc-webicon-slideshare-m.png">
+                </a>
+                <a href="http://google.com/+FlávioRibeiroBarbosa">
+                  <img src="https://raw.github.com/recarreira/all_about_you/master/images/icons/fc-webicon-googleplus-m.png">
+                </a>
+                <a href="http://github.com/flavioribeiro">
+                  <img src="https://raw.github.com/recarreira/all_about_you/master/images/icons/fc-webicon-github-m.png">
+                </a>
+                <a href="http://blog.flavioribeiro.com/rss">
+                  <img src="https://raw.github.com/recarreira/all_about_you/master/images/icons/fc-webicon-rss-m.png">
+                </a>
+
+              </section>
+             <section class="copyright">All content copyright <a href="/">Flávio Ribeiro</a> &copy; 2014 &bull; All rights reserved.</section>
+             <section class="poweredby">Proudly published with <a class="icon-ghost" href="http://ghost.org">Ghost</a></section>
+        </div>
+    </footer>
+
+    
+    <script src="/shared/vendor/jquery/jquery.js"></script>
+
+    
+    <script type="text/javascript" src="/assets/js/index.js"></script>
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+
+</body>
+<script type="text/javascript">
+    var disqus_shortname = 'blogflavioribeiro';
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+</html>

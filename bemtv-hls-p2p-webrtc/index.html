@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+    
+    <title>BemTV: Hybrid CDN/P2P Architecture for HLS Broadcasts</title>
+    <meta name="description" content="" />
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="MobileOptimized" content="320" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    
+    <link rel="stylesheet" type="text/css" href="/assets/css/screen.css" />
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic|Open+Sans:700,400" />
+
+    
+    <meta name="generator" content="Ghost 0.3" />
+<link rel="alternate" type="application/rss+xml" title="RSS" href="/rss/">
+</head>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-46289775-1', 'flavioribeiro.com');
+  ga('send', 'pageview');
+
+</script>
+<body class="post-template tag-p2p tag-peer-to-peer tag-hls tag-http-live-streaming tag-webrtc tag-online-video tag-cdn">
+
+    
+    
+
+
+
+<main class="content" role="main">
+
+    <article class="post tag-p2p tag-peer-to-peer tag-hls tag-http-live-streaming tag-webrtc tag-online-video tag-cdn">
+
+        
+        <header class="post-header">
+            <a id="blog-logo" href="http://blog.flavioribeiro.com">
+                
+                    <img src="/content/images/2015/Dec/logo.png" alt="Blog Logo" />
+                
+            </a>
+        </header>
+
+        
+        
+
+        
+        <span class="post-meta"><time datetime="2014-08-07">07 Aug 2014</time> on p2p | peer-to-peer | hls | http live streaming | webrtc | online video | cdn</span>
+
+        <h1 class="post-title">BemTV: Hybrid CDN/P2P Architecture for HLS Broadcasts</h1>
+
+        <section class="post-content">
+            <p>During the last three years I've been working on the Live Video infrastructure at <a href="http://globo.com">Globo.com</a> and I've realized that one of the biggest problems we had here in Brazil is related to CDN throughput and telecom infrastructure in general. Looking at what has been happening with online streaming of live events around the world (as <a href="http://www.thedailybeast.com/articles/2014/03/03/abc-promised-to-livestream-the-oscars-and-totally-failed.html">The Oscars</a> and <a href="http://www.hollywoodreporter.com/live-feed/hbo-go-crashes-true-detective-687087">True Detective Finale</a>) and the fights involving <a href="http://en.wikipedia.org/wiki/Over-the-top_content">OTT</a> services and telecom carriers, one can realize that this is a common problem everywhere.</p>
+
+<p>With that in mind, I decided to explore this problem and as I'm attending the last year of my <a href="http://www.inf.puc-rio.br">Master's</a> and my colleagues at work were bootstraping a new team to develop a video player from scratch, it happened to be the perfect timing. I joined this new team and defined my Master's thesis theme aiming to develop a Hybrid CDN/P2P architecture for online live broadcasts using the popular <a href="http://en.wikipedia.org/wiki/HTTP_Live_Streaming">HLS</a> protocol together with <a href="http://www.webrtc.org/">WebRTC</a>.</p>
+
+<p>First, we baptized the new player as <a href="http://clappr.io">Clappr</a> - the name "clapper" comes from <a href="http://en.wikipedia.org/wiki/Clapperboard">clapperboard</a> - and open-sourced the project. You can follow our progress on <a href="https://github.com/globocom/clappr">github</a> and yes, we're aware that we'll need to write some documentation on how to deploy the player and write plugins, it is already on our <a href="https://github.com/globocom/clappr/issues/115">backlog</a>. A nice logo and better UI are also on the go.</p>
+
+<p>After that, I've created a <a href="http://github.com/bemtv/clappr-p2phls-plugin">clappr plugin</a> that tries to drain video segments from peers in order to decrease the number of requests to CDN servers, reducing the cost of transmission and enhancing system’s scalability. If something goes wrong between the peers, it will get from the CDN without impacting user experience. This project is called <a href="http://bem.tv">BemTV</a> and today I'm releasing its first version.</p>
+
+<p><img src="https://cloud.githubusercontent.com/assets/244265/4656256/970fc0f4-54d2-11e4-9fdb-af768411b0b3.png" alt="BemTV in action" /></p>
+
+<p><a href="http://bem.tv">BemTV</a> is open source. I must warn you that this is a nightly <a href="https://github.com/bemtv/clappr-p2phls-plugin/releases">build</a> and needs some improvements before debut on production environment (I've performed just some controlled tests) but I'm inviting you to test it on <a href="http://bem.tv">http://bem.tv</a> and also look at the <a href="http://github.com/bemtv">code</a>. The video in there is in loop, emulating a live video streaming behavior.</p>
+
+<p>I'll be more than happy to answer questions and fix bugs or problems that arise. Call friends near you, look at the <a href="https://github.com/bemtv/clappr-p2phls-stats-plugin">statistics box</a> and tell me if the video segments are being exchanged between you guys!</p>
+        </section>
+
+        <footer class="post-footer">
+
+            
+                <section class="author">
+                    <h4>Flávio Ribeiro</h4>
+                    <p>Brazilian Software Engineer, collector of vinyl figure toys and passionate about software development, open source, distributed systems and multimedia.</p>
+                </section>
+            
+
+            <section class="share">
+                <h4>Share this post</h4>
+                <a class="icon-twitter" href="http://twitter.com/share?text=BemTV: Hybrid CDN/P2P Architecture for HLS Broadcasts&url=http://blog.flavioribeiro.com/bemtv-hls-p2p-webrtc/"
+                    onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                    <span class="hidden">Twitter</span>
+                </a>
+                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.flavioribeiro.com/bemtv-hls-p2p-webrtc/"
+                    onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+                    <span class="hidden">Facebook</span>
+                </a>
+                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://blog.flavioribeiro.com/bemtv-hls-p2p-webrtc/"
+                   onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+                    <span class="hidden">Google+</span>
+                </a>
+            </section>
+
+        </footer>
+
+        
+<div><hr /></div>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  var disqus_identifier = '';
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </article>
+
+</main>
+
+
+    <footer class="site-footer">
+        <a class="subscribe icon-feed" href="http://blog.flavioribeiro.com/rss/"><span class="tooltip">Subscribe!</span></a>
+        <div class="inner">
+             <section class="social-networks">
+                <a href="http://twitter.com/flavioribeiro">
+                  <img src="https://raw.github.com/recarreira/all_about_you/master/images/icons/fc-webicon-twitter-m.png">
+                </a>
+                <a href="https://foursquare.com/flavioribeiro">
+                  <img src="https://raw.github.com/recarreira/all_about_you/master/images/icons/fc-webicon-foursquare-m.png">
+                </a>
+                <a href="http://br.linkedin.com/in/flavioribeiro">
+                  <img src="https://raw.github.com/recarreira/all_about_you/master/images/icons/fc-webicon-linkedin-m.png">
+                </a>
+                <a href="http://last.fm/user/flaviornb">
+                  <img src="https://raw.github.com/recarreira/all_about_you/master/images/icons/fc-webicon-lastfm-m.png">
+                </a>
+                <a href="http://www.slideshare.net/flavioribeiro/">
+                  <img src="https://raw.github.com/recarreira/all_about_you/master/images/icons/fc-webicon-slideshare-m.png">
+                </a>
+                <a href="http://google.com/+FlávioRibeiroBarbosa">
+                  <img src="https://raw.github.com/recarreira/all_about_you/master/images/icons/fc-webicon-googleplus-m.png">
+                </a>
+                <a href="http://github.com/flavioribeiro">
+                  <img src="https://raw.github.com/recarreira/all_about_you/master/images/icons/fc-webicon-github-m.png">
+                </a>
+                <a href="http://blog.flavioribeiro.com/rss">
+                  <img src="https://raw.github.com/recarreira/all_about_you/master/images/icons/fc-webicon-rss-m.png">
+                </a>
+
+              </section>
+             <section class="copyright">All content copyright <a href="/">Flávio Ribeiro</a> &copy; 2014 &bull; All rights reserved.</section>
+             <section class="poweredby">Proudly published with <a class="icon-ghost" href="http://ghost.org">Ghost</a></section>
+        </div>
+    </footer>
+
+    
+    <script src="/shared/vendor/jquery/jquery.js"></script>
+
+    
+    <script type="text/javascript" src="/assets/js/index.js"></script>
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+
+</body>
+<script type="text/javascript">
+    var disqus_shortname = 'blogflavioribeiro';
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+</html>

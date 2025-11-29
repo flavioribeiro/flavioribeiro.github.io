@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Flávio Ribeiro]]></title><description><![CDATA[Flávio Ribeiro]]></description><link>http://blog.flavioribeiro.com</link><generator>NodeJS RSS Module</generator><lastBuildDate>Sat, 29 Nov 2025 14:47:31 GMT</lastBuildDate><atom:link href="http://blog.flavioribeiro.com/rss/" rel="self" type="application/rss+xml"/><author><![CDATA[Flávio Ribeiro]]></author><ttl>60</ttl><item><title><![CDATA[Snickers: Open Source HTTP API for Media Encoding]]></title><description><![CDATA[<p>At the beginning of this year we created a group on our video engineering team to deal with the ingesting, encoding, publishing and syndication of The New York Times videos. The main goal of the team was to build a pipeline that is vendor agnostic, cloud-based, efficient and elastic. We also wanted to build an easier workflow for video producers in the newsroom and third-party partners who distribute our videos. We named this team <strong>Media Factory</strong>.</p>
+
+<p>After a few months of development, the pipeline is almost ready to be deployed to production.  It consists of three different steps: Content Acquisition, Transcoding and Distribution. The content acquisition part is responsible for receiving ProRes/Raw videos, the transcoding API transforms the source files in playable videos by our supported browsers and devices and the distribution step sends the final videos to our CDN.</p>
+
+<p>Probably the most important and complex part of the pipeline is the transcoding process. Instead of using heavy and expensive hardware for that we decided to create <a href='https://github.com/NYTimes/encoding-wrapper' >clients</a> for different encoding services like <a href='http://www.encoding.com/' >Encoding.com</a>, <a href='https://aws.amazon.com/elastictranscoder/' >Elastic Transcoder</a> and <a href='http://elementaltechnologies.com/' >Elemental</a>. This enabled us to decide which one to use based on a set of variables such as availability, speed, formats supported (HLS, webm, mp4, DASH, etc) and even cost.</p>
+
+<p>While discussing the design of the pipeline and the integration with cloud services, we thought it would be useful (and FUN!) to implement another provider that would be just a tiny wrapper for <a href='https://ffmpeg.org/' >FFmpeg</a> or <a href='https://gstreamer.freedesktop.org/' >GStreamer</a>. By using this tiny wrapper, we would have the freedom to deploy anywhere, implement new features (such as the generation of thumbnails) and perhaps, one day, be used to encode our lower priority jobs.</p>
+
+<p>We have plans to write a blog post about the details of each step and how they work together on the <a href='http://open.blogs.nytimes.com/' >Open Blog</a>. We should work on that as soon as we have people at the company using the pipeline.</p>
+
+<h3 id="timetolearnsomego">Time To Learn Some Go</h3>
+
+<p>After having a lot of fun on the <a href='http://open.blogs.nytimes.com/2016/02/08/flash-free-video-in-2016/' >journey to remove Flash from our player</a> I got attracted by the chance to be part of this team. I was already willing to work with back-end services again and knowing that the company is <a href='https://www.youtube.com/watch?v=bAQ9ShmXYLY' >adopting Go for API's</a> turned this opportunity into something even more attractive. Although I was participating on meetings and design decisions, I actually started working on the team in April.</p>
+
+<p>I had never worked with Go before and after a few years plunged on dynamically typed languages I felt a bit of pain during the first steps working with it. The rest of the team was already fluent and I though I'd need something to exercise myself and keep up with the team's pace. </p>
+
+<p><img src='https://cloud.githubusercontent.com/assets/244265/16903251/00c5f2f8-4c47-11e6-9f2c-9c86bb37f114.png'  alt="snickers logo" /></p>
+
+<p>Creating this dummy provider that is a wrapper for FFmpeg seemed like a good chance for me to evolve my Go skills. A month ago I started writting it, I called the project <strong>Snickers</strong>. I put this name because it's my favorite chocolate and I was holding one when I   created the <a href='http://github.com/snickers/snickers' >GitHub repository</a>.</p>
+
+<p>To be honest, the title of this post doesn't actually represent the current state of the project. Right now, it looks much more like a proof-of-concept/embryo project than anything else. </p>
+
+<p>It supports the download of sources from <strong>HTTP</strong> and <strong>Amazon S3</strong>, encode them in <strong>H264/MP4</strong> or <strong>VP8/WebM</strong> using a <a href='https://github.com/3d0c/gmf' >FFmpeg binding</a> and uploads the results to <strong>Amazon S3</strong>. We  still need a plethora of features to be able to actually call it a Media Encoding API, but one of the purposes of this post is to broadcast the idea and try to engage people to collaborate. <strong>Snickers</strong> already has <a href='https://github.com/snickers/snickers/graphs/contributors' >contributors</a>!</p>
+
+<h4 id="nextsteps">Next Steps</h4>
+
+<p>I have a bunch of ideas for this project. The next steps include building clients in JavaScript so people can use <strong>Snickers</strong> directly on the browser (with nice progress bars and stuff) as well as a client in Go, probably as part of the <a href='https://github.com/NYTimes/encoding-wrapper' >encoding-wrapper</a> project. We also need to write some glue code for the Transcoding API so <strong>Snickers</strong> can be considered in the decision process of Media Factory pipeline. We use a lot of HLS at the company so HLS support is mandatory and probably the highest priority feature.</p>
+
+<p>I'm also interested in working on the creation of a GStreamer driver for the encoding part so we can have benchmarks using different drivers. I saw that there's already a <a href='https://github.com/ziutek/gst/network' >Gstreamer binding</a> for Go and it seems that the code is <a href='https://github.com/ziutek/gst/blob/master/examples/simple.go' >simpler</a> than handling libav calls. </p>
+
+<p>You can find some <a href='https://github.com/snickers/snickers/blob/master/README.md' >instructions</a> on how to deploy and <a href='https://github.com/snickers/snickers/wiki/How-to-Use-the-API' >use the API</a> as well as some <a href='https://github.com/snickers/snickers/tree/master/examples' >examples</a>. I also labeled a bunch of relatively <a href='https://github.com/snickers/snickers/issues?q=is%3Aissue+is%3Aopen+label%3Aeasy' >easy issues</a> in case you want to work on and be part of this project.</p>]]></description><link>http://blog.flavioribeiro.com/snickers-open-source-api-for-media-encoding/</link><guid isPermaLink="false">4dee242e-ae72-4f3e-8b40-526766982045</guid><dc:creator><![CDATA[Flávio Ribeiro]]></dc:creator><pubDate>Mon, 18 Jul 2016 17:39:00 GMT</pubDate></item><item><title><![CDATA[Working at the Video Team of The New York Times]]></title><description><![CDATA[<p>So, after more than 3 years of the publication of <a href='http://felipesilva.co/post/27225322554/how-is-work-at-the-times' >this</a> post and almost 9 months working here, I'll give my two cents and elaborate a bit about my experience on the day-to-day work at the video team of <a href='http://nytimes.com/video' >The New York Times</a>.</p>
+
+<p><img src='http://www.shildan.com/wp-content/uploads/2012/08/2007DS67.428.jpg'  alt="the new york times" /></p>
+
+<h4 id="environment">Environment</h4>
+
+<p>The technology of the video team is split into three teams: <strong>Video Players (VHS)</strong>, <strong>Times Video</strong> and the brand new <strong>Video Publishing API</strong> team. We are growing really fast and things are changing in every direction; it's clear to me that everyone is excited and committed to our upcoming challenges.</p>
+
+<p>We work in a fast-paced environment and always adapting our agile processes. However, I never feel rushed and everyone is committed to do deliveries with meaningful impact. The engineers have the freedom to give input on process, features and backlog. For example, after <a href='https://twitter.com/flavioribeiro/status/604396057133334528' >this quizz</a> I was able to implement and send the <em>thumbs on seekbar</em> feature to production (<a href='http://nyti.ms/1jaFlVK' >http://nyti.ms/1jaFlVK</a>).</p>
+
+<p>We have frequent 1:1's and occasional brainstorm meetings. Our daily meeting is around 11 AM and takes no longer than 10 minutes, we usually have people working from home and the meeting always happens on Google Hangouts.</p>
+
+<p><img src='https://cloud.githubusercontent.com/assets/244265/11938654/50baf68e-a7ea-11e5-93ce-326b8474700a.png'  alt="video team at nytimes" />
+<div align=center><font size=2><i>one of our daily meetings some time ago</i></div></font></p>
+
+<p>Our team consists of people from all around the world such as U.S., China, Brazil, Canada among others. Our cultural differences are always the subject during lunch.</p>
+
+<p>Speaking of lunches, while we don't have free food we do have a restaurant inside the building that serves typical food from a different country every day (somedays the food is awesome, sometimes not much).</p>
+
+<p>Generally, a new hire rotates between all projects during the first month. This helps with understanding the whole video platform and familiarize with both team members and the codebase.</p>
+
+<p>The Times also hosts a <a href='http://open.blogs.nytimes.com/' >tech blog</a>, 100% days (two days to do whatever you want) and <a href='https://twitter.com/priyaelizabeth/status/652594800500326400' >hackweeks</a>. There's also some events open to the public, you can find the schedule of events <a href='http://developers.nytimes.com/events/' >here</a>.</p>
+
+<h4 id="technology">Technology</h4>
+
+<p>We use JIRA to track our projects, milestones and sprints. I personally don't like it — it's too slow, hard to glue with the code and full of buttons. We use <a href='https://github.com/nytimes' >Github</a> for code and <a href='https://slack.com/' >Slack</a> for communication throughout the entire company. Some of my favorite channels include #coffee for caffeine addicts, #conferences-events for events and #snacks for free goodies around the building.</p>
+
+<p>The VHS team uses plain JavaScript for the players. We use <a href='http://gruntjs.com/' >Grunt</a> for tasks and <a href='http://karma-runner.github.io/0.13/index.html' >Karma</a> + <a href='http://chaijs.com/' >Chai</a> + <a href='https://mochajs.org/' >Mocha</a> + <a href='http://sinonjs.org/' >Sinon</a> for tests. One of our targets this year was to get rid of Flash so we needed to integrate the player with VPAID for ads and use <a href='https://github.com/dailymotion/hls.js' >hls.js</a> for live streams. This whole journey deserves it's own post,  we're planning to do that on our <a href='http://open.blogs.nytimes.com/' >tech blog</a>. </p>
+
+<p>The Times Video team is responsible for <a href='http://nytimes.com/video' >Times Video product</a>. We are using ES6 with <a href='https://babeljs.io/' >Babel</a> and moving from <a href='http://backbonejs.org/' >Backbone</a> to <a href='https://facebook.github.io/react/' >React</a>. The back-end is made with <a href='https://nodejs.org/en/' >Node</a> + <a href='http://expressjs.com/en/index.html' >Express</a> + <a href='http://memcached.org/' >Memcached</a>. For testing, we're using the same stack as VHS.</p>
+
+<p>The Video Publishing API is still being assembled and will support our encoding pipeline, including the production &amp; editing integration, security, encoding profiles, and syndication among others. The company is in an adoption movement of the <a href='https://golang.org/' >Go language</a> and we are willing to use it to build the API's.</p>
+
+<h4 id="me">Me</h4>
+
+<p>I was hired in April 2015 as a contractor and waited until October for the H1B visa, when I started working as a full-time employee. During this time I went to New York twice to get to know the team. I also used those trips to pick out apartments in different neighborhoods to get a better idea of where I would live.</p>
+
+<p>It was my first experience working remotely and it was tough, I was living in Rio de Janeiro at the time and decided to spend some time with my parents and friends in <a href='https://en.wikipedia.org/wiki/Campina_Grande' >Campina Grande</a>, where I grew up. My life became a whirlwind during those months and my productivity was well below normal.</p>
+
+<p><img src='https://cloud.githubusercontent.com/assets/244265/11939277/fa24c372-a7ee-11e5-8f5c-b2f6bb9a20f5.png'  alt="flavioribeiro github streak" />
+<div align=center><font size=2><i>my <a href='http://github.com/flavioribeiro' >github</a> streak proving I'm going back to a good shape</i></div></font></p>
+
+<p>Since I arrived in New York, I feel much better. I have a routine, the commute works and the city surprises me everyday. As a natural Brazilian accustomed to a hot weather, I'm afraid of the upcoming winter. However, I'm lucky the cold is slow to <a href='http://nypost.com/2015/12/13/this-is-the-warmest-december-13-in-nyc-history/' >arrive</a> this year. </p>
+
+<p>At the building, every engineer has it's own cube and it's huge. More than twice as size as my last table. It fits some books, figure toys, a small whiteboard and sometimes another coworker when pairing. You get a little isolated and is quite different from how are the open tables in startups, but I personally like the privacy that the cube give to me. The office is calm and quiet, I never turned on the noise cancellation of my headphone.</p>
+
+<p>I'm very happy and hope to contribute even more on next year. If you want to be part of this amazing team, we are <a href='http://developers.nytimes.com/careers/' >hiring</a>.</p>
+
+<p><img src='https://cloud.githubusercontent.com/assets/244265/11940459/d25bccd4-a7f6-11e5-8e1f-bc385b02da35.gif'  alt="video team" />
+<div align=center><font size=2><i>united colors of video team!</i></div></font></p>
+
+<p>Related links:</p>
+
+<ul>
+<li><a href='https://github.com/flavioribeiro/video-thumbnail-generator' >Video Thumbnail Generator</a></li>
+<li><a href='http://www.nytimes.com/2007/11/20/arts/design/20time.html?_r=0' >The New York Times Building</a></li>
+</ul>]]></description><link>http://blog.flavioribeiro.com/working-at-the-video-team-of-the-new-york-times/</link><guid isPermaLink="false">b4dc3f77-b8b5-4d03-b6fc-83bc9264f977</guid><dc:creator><![CDATA[Flávio Ribeiro]]></dc:creator><pubDate>Tue, 22 Dec 2015 15:27:54 GMT</pubDate></item><item><title><![CDATA[It&#x27;s time to move on]]></title><description><![CDATA[<p>After almost 4 years immersed in a lot of exciting challenges, it's time to move on.</p>
+
+<p><img src='http://blog.flavioribeiro.com/content/images/2015/Mar/DSC_3553_JPG.jpg'  alt="Sunset by instagram.com/fanydantas" /></p>
+
+<div align=center><font size=2><i>Sunset from my balcony by <a href='http://instagram.com/fanydantas' >Fany</a></i></font></div>
+
+<p>When I started working at <a href='http://globo.com/' >Globo.com</a>, I realized that every <strong>if</strong> that I wrote would run in hundreds of thousands of computers around the country. Until then, I've only worked on small startups in the Northeast of Brazil where the impact of their products have smaller proportions.  Describing this feeling is hard. I would argue that, for a software developer like me, knowing that your code is being used is as rewarding as receiving real money.</p>
+
+<p>During the time at Globo, I faced <em>huge</em> projects. As we've worked developing software for the video delivery stack, almost every big transmission - like <em>elections</em> or <em>FIFA World Cup</em> - had their special issues and corner cases. Following the trend, we developed a live video streaming stack from scratch and seeing this new infrastructure beating the concurrent users peak twice was priceless. </p>
+
+<p><img src='http://blog.flavioribeiro.com/content/images/2015/Mar/copa.jpg'  alt="United Colors of WebMedia" /></p>
+
+<div align=center><font size=2><i>Part of WebMedia Team during the World Cup. We were still believing we would be Champions.</i></font></div>
+
+<p>I could also work with the most awesome engineers I've ever met. Sometimes I felt that the lunch time was kind of a graduate class (actually, I should had taken a pencil and paper to it). The discussions ranged from <a href='http://blog.hltbra.net/2013/04/08/dry-and-testing.html' >writing tests</a> to how telecommunications works. </p>
+
+<p>Since the beginning of last year I've worked full time on an open source <a href='http://blog.flavioribeiro.com/clappr-an-extensible-media-player-for-the-web/' >project</a> which was the real reason for me to get up out of bed to go to work and sometimes even rise up early to answer one issue or fix a bug that someone dropped on <a href='http://github.com/flavioribeiro' >github</a>. I've already said this here but...Damn, how awesome is working with FOSS!</p>
+
+<p>About 6 months ago I was catching myself visiting <a href='http://br.linkedin.com/in/flavioribeiro' >LinkedIn</a>, hypothetically looking for a new job, and this made me think that it was time to move on. I've read somewhere that when you're feeling attracted by other opportunities, it's a big red signal that you're not happy anymore and need a change. I've applied to some companies and met a lot of great guys during the interviews but the last one was mind changing. </p>
+
+<blockquote>
+  <p>If you get the chance to work overseas, take it. There is never a right time. And we always regret the things we don’t do far more than the things we do. (<a href='https://www.linkedin.com/pub/shane-rodgers/7/531/ba4' >Shane Rodgers</a>)</p>
+</blockquote>
+
+<p>I'm joining the Video Team at <a href='http://video.nytimes.com/' >The New York Times</a>. Next week I'm heading to New York to visit the office and meet my coworkers. I must say that I'm totally <strong>anxious</strong> and <strong>excited</strong> about it, but a lot of things need to happen before I move definitively to America. Until there, I'll work remotely (which will be a challenge apart). </p>
+
+<p>I hope that everything that I lived these years were only the beginning and I'm sure I have a lot of things to learn. I'll try hard to publish more posts regarding the obstacles I'll face and I hope you'll be cheering for me.</p>
+
+<p>Related Links: <br />
+<a href='http://felipesilva.co/post/27225322554/how-is-work-at-the-times' >Hey Feio, how is working at The Times?</a><br>
+<a href='http://blog.salsitasoft.com/what-i-wish-i-knew-when-starting-out-as-a-software-developer-slow-the-fuck-down/' >What I whish I knew when starting out as a Software Developer</a><br>
+<a href='https://www.linkedin.com/pulse/career-advice-i-wish-had-25-shane-rodgers' >The career advice I wish I had at 25</a></p>]]></description><link>http://blog.flavioribeiro.com/its-time-to-move-on/</link><guid isPermaLink="false">cd4a9eaf-91ae-4a7e-a416-e684e6f3c4ca</guid><dc:creator><![CDATA[Flávio Ribeiro]]></dc:creator><pubDate>Thu, 26 Mar 2015 12:36:31 GMT</pubDate></item><item><title><![CDATA[Disserting on Clappr: An extensible media player for the web]]></title><description><![CDATA[<p>Motivated by <a href='http://leandromoreira.com.br/' >Leandro</a>, today I'm gonna write a bit about <a href='http://github.com/globocom/clappr' >Clappr</a>, an open source media player for the web. If you're Brazilian or know portuguese, there's also some useful information at <a href='http://thiago.me/' >Thiago</a>'s <a href='https://speakerdeck.com/thiagopnts/o-alem' >talk</a>. Actually, I will inadvertently and explicitly steal some data from it.</p>
+
+<h4 id="history">History</h4>
+
+<p>During the last 4 years at <a href='http://globo.com/' >Globo.com</a> there was no team focused specifically on the development of the video player. It was a monolithic flash component based on <a href='http://sourceforge.net/adobe/osmf/home/Home/' >OSMF</a>, mainly designed for playing progressive download videos on on-demand scenarios and also cover live streams through <a href='http://en.wikipedia.org/wiki/Real_Time_Messaging_Protocol' >RTMP</a> protocol. </p>
+
+<p><img src='http://blog.flavioribeiro.com/content/images/2014/Nov/Screenshot_2014_11_25_22_51_41.png'  alt="Globo Player 2.0" />
+<center><em>Previous Globo.com player</em></center></p>
+
+<p>At the beginning things were good, but in the course of time, a <strong>lot</strong> of new features were added (like support for subtitles, advertisement, DRM, new streaming protocols, picture-in-picture, etc). Since there wasn't an official owner of the project and <a href='http://blog.codinghorror.com/the-noble-art-of-maintenance-programming/' >maintenance programming is a dirty work</a>, we were building a wall with crooked bricks. Player tasks started to be faced with revulsion and pain. </p>
+
+<p>As the FIFA World Cup 2014 project came with a bunch of new requirements and knowing that our live video streaming stack was rebuilt (<a href='http://en.wikipedia.org/wiki/HTTP_Live_Streaming' >HLS</a> in favor of RTMP), we decided to go against <a href='http://www.joelonsoftware.com/articles/fog0000000069.html' >Joel</a> and bootstrap a brand new video player in order to support the requirements and improve the overall performance on serving the matches and upcoming transmissions. The idea was to favor the playback directly on html5 (with fallback to flash when necessary).</p>
+
+<h4 id="opensource">Open Source</h4>
+
+<p>At <a href='http://globo.com/' >Globo.com</a> we use hundreds of open source projects and when starting a project from scratch, we usually ask ourselves <em>Why not open source it?</em>. First, there's the motto of give something back to the community, but I personally believe that committing and pushing on <a href='http://github.com/flavioribeiro' >Github</a>, put your code available to the world and maybe build a community around your baby acts like a fuel for your brain, pushes you to the limits of productivity.</p>
+
+<blockquote>
+  <p>Open source software acts like a fuel for your brain, pushes you to the limits of productivity.</p>
+</blockquote>
+
+<p>Since we are in times where video delivery is very heterogeneous between browsers and devices, we choose for a plug-ins based architecture, allowing us to provide almost everything as open source, except the components that interact with our internal infrastructure.</p>
+
+<p>Visit <a href='http://opensource.globo.com/en/' >Globo.com Open Source</a> to see more open source projects maintained by my co-workers.</p>
+
+<h4 id="clapprarchitecture">Clappr Architecture</h4>
+
+<p><img src='http://blog.flavioribeiro.com/content/images/2014/Nov/clappr_architecture-1.jpg'  alt="Clappr Architecture, First Meeting" />
+<center><em>Designing Clappr, you can see the full image <a href='http://cdn.bem.tv/clappr_architecture.jpg' >here</a></em>.</center></p>
+
+<p>With <a href='http://en.wikipedia.org/wiki/Component-based_software_engineering' >CBSE</a> in mind we could figure out that there were three different plug-in types:</p>
+
+<ul>
+<li><p><a href='https://github.com/globocom/clappr/tree/master/src/playbacks' >Playback Plugins</a>: Responsible for playing a given source. When embedded, Clappr will  search through playback plugins until find one who <a href='https://github.com/globocom/clappr/blob/master/src/playbacks/html5_video/html5_video.js' #L194">canPlay()</a> the source.</p></li>
+<li><p><a href='https://github.com/globocom/clappr/tree/master/src/plugins' >Container Plugins</a>: Every playback is associated with a container. In most cases, only one container and a playback will be instantiated. It is inside containers that, guess what, the container plugins work. Some examples are the built-in <a href='https://github.com/globocom/clappr/tree/master/src/plugins/stats' >stats</a> plugin that listen for playback events (buffering, bufferfull, play/pause, etc), the <a href='https://github.com/globocom/clappr/tree/master/src/plugins/spinner_three_bounce' >spinner</a> and the <a href='https://github.com/globocom/clappr/tree/master/src/plugins/watermark' >watermark</a>.</p></li>
+<li><p><a href='https://github.com/globocom/clappr/tree/master/src/plugins' >Core Plugins</a>: These are the ones who control everything. Let's say you want two videos playing at the same time, the main one and one smaller at the corner, like a <a href='http://en.wikipedia.org/wiki/Picture-in-picture' >picture-in-picture</a>. A core plugin is able to instantiate two containers with a playback plugin each, set the size of the secondary video and put it on a bigger z-index. </p></li>
+</ul>
+
+<p>There's also a bunch of built-in components, like the <a href='https://github.com/globocom/clappr/blob/master/src/components/mediator.js' >Mediator</a> who is responsible for routing events between scopes (and even make the Flash ↔ JS bridge when necessary) and the <a href='https://github.com/globocom/clappr/blob/master/src/components/loader/loader.js' >Loader</a> who manage to load all built-in and external plugins. Wat? External plugins?</p>
+
+<h4 id="externalplugins">External Plug-ins</h4>
+
+<p>It's not only possible but simple to create your own external plug-in. There's a <a href='http://github.com/globocom/generator-clappr-plugin' >Clappr Plug-ins Generator</a> that will ask you the kind of plug-in you want to create and build the structure for you. I've used it to create <a href='http://blog.flavioribeiro.com/bemtv-hls-p2p-webrtc/' >BemTV</a> plugins, the <a href='https://github.com/bemtv/clappr-p2phls-plugin' >playback</a> and a <a href='https://github.com/bemtv/clappr-p2phls-stats-plugin' >container plugin</a> to show peer-to-peer statistics. Globo.com has some proprietary plug-ins such as media control bar, thumb-on-seek and others.</p>
+
+<p><img src='http://blog.flavioribeiro.com/content/images/2014/Nov/06_player_multicamera-1.jpg'  alt="Clappr with Globo.com Plugins" />
+<center><em>Clappr with some Globo.com proprietary  plugins used at World Cup</em></center></p>
+
+<h4 id="technology">Technology</h4>
+
+<ul>
+<li><a href='https://github.com/google/traceur-compiler' >Traceur</a>: write code in EcmaScript 6</li>
+<li><a href='http://browserify.org/' >Browserify</a>: create the bundle, require()</li>
+<li><a href='http://blog.flavioribeiro.com/karma-runner.github.io' >Karma</a>, <a href='http://sinonjs.org/' >Sinon</a>, <a href='http://mochajs.org/' >Mocha</a>: tests</li>
+<li><a href='http://gulpjs.com/' >Gulpjs</a>: tasks (build, upload, etc)</li>
+</ul>
+
+<h4 id="currentstatus">Current Status</h4>
+
+<p>Clappr already <a href='https://github.com/globocom/clappr' #formats-supported">supports</a> the mainstream formats and has some special features like DVR (travel in time on live streams). We're heading to <strong>1.0.0</strong> release, but first we need to create a decent documentation and landing page. Both are on the go. </p>
+
+<p>We tought that the architecture was so solid that it motivated us to bootstrap mobile versions of Clappr. We already created <a href='http://github.com/globocom/clappr-ios' >iOS</a> and <a href='http://github.com/globocom/clappr-android' >Android</a> repositories in case you want to follow our future progress.</p>
+
+<h4 id="contributing">Contributing</h4>
+
+<p>We are just <a href='https://github.com/globocom/clappr/graphs/contributors' >three</a> commiters, but there are some <a href='https://github.com/globocom/clappr/labels/easy' >easy</a> issues opened. If you felt encouraged in contributing, I'll be more than glad to help you. You can find us at <a href='http://groups.google.com/forum/' #!forum/clappr">clappr discussion list</a> and I'm always online as flavioribeiro at freenode.</p>]]></description><link>http://blog.flavioribeiro.com/clappr-an-extensible-media-player-for-the-web/</link><guid isPermaLink="false">5a427960-1c78-47cc-955a-3fc67f19b679</guid><dc:creator><![CDATA[Flávio Ribeiro]]></dc:creator><pubDate>Wed, 26 Nov 2014 00:35:10 GMT</pubDate></item><item><title><![CDATA[BemTV: Hybrid CDN&#x2F;P2P Architecture for HLS Broadcasts]]></title><description><![CDATA[<p>During the last three years I've been working on the Live Video infrastructure at <a href='http://globo.com/' >Globo.com</a> and I've realized that one of the biggest problems we had here in Brazil is related to CDN throughput and telecom infrastructure in general. Looking at what has been happening with online streaming of live events around the world (as <a href='http://www.thedailybeast.com/articles/2014/03/03/abc-promised-to-livestream-the-oscars-and-totally-failed.html' >The Oscars</a> and <a href='http://www.hollywoodreporter.com/live-feed/hbo-go-crashes-true-detective-687087' >True Detective Finale</a>) and the fights involving <a href='http://en.wikipedia.org/wiki/Over-the-top_content' >OTT</a> services and telecom carriers, one can realize that this is a common problem everywhere.</p>
+
+<p>With that in mind, I decided to explore this problem and as I'm attending the last year of my <a href='http://www.inf.puc-rio.br/' >Master's</a> and my colleagues at work were bootstraping a new team to develop a video player from scratch, it happened to be the perfect timing. I joined this new team and defined my Master's thesis theme aiming to develop a Hybrid CDN/P2P architecture for online live broadcasts using the popular <a href='http://en.wikipedia.org/wiki/HTTP_Live_Streaming' >HLS</a> protocol together with <a href='http://www.webrtc.org/' >WebRTC</a>.</p>
+
+<p>First, we baptized the new player as <a href='http://clappr.io/' >Clappr</a> - the name "clapper" comes from <a href='http://en.wikipedia.org/wiki/Clapperboard' >clapperboard</a> - and open-sourced the project. You can follow our progress on <a href='https://github.com/globocom/clappr' >github</a> and yes, we're aware that we'll need to write some documentation on how to deploy the player and write plugins, it is already on our <a href='https://github.com/globocom/clappr/issues/115' >backlog</a>. A nice logo and better UI are also on the go.</p>
+
+<p>After that, I've created a <a href='http://github.com/bemtv/clappr-p2phls-plugin' >clappr plugin</a> that tries to drain video segments from peers in order to decrease the number of requests to CDN servers, reducing the cost of transmission and enhancing system’s scalability. If something goes wrong between the peers, it will get from the CDN without impacting user experience. This project is called <a href='http://bem.tv/' >BemTV</a> and today I'm releasing its first version.</p>
+
+<p><img src='https://cloud.githubusercontent.com/assets/244265/4656256/970fc0f4-54d2-11e4-9fdb-af768411b0b3.png'  alt="BemTV in action" /></p>
+
+<p><a href='http://bem.tv/' >BemTV</a> is open source. I must warn you that this is a nightly <a href='https://github.com/bemtv/clappr-p2phls-plugin/releases' >build</a> and needs some improvements before debut on production environment (I've performed just some controlled tests) but I'm inviting you to test it on <a href='http://bem.tv/' >http://bem.tv</a> and also look at the <a href='http://github.com/bemtv' >code</a>. The video in there is in loop, emulating a live video streaming behavior.</p>
+
+<p>I'll be more than happy to answer questions and fix bugs or problems that arise. Call friends near you, look at the <a href='https://github.com/bemtv/clappr-p2phls-stats-plugin' >statistics box</a> and tell me if the video segments are being exchanged between you guys!</p>]]></description><link>http://blog.flavioribeiro.com/bemtv-hls-p2p-webrtc/</link><guid isPermaLink="false">0d849352-c90a-49a2-8bd1-c816804b86ad</guid><dc:creator><![CDATA[Flávio Ribeiro]]></dc:creator><pubDate>Thu, 07 Aug 2014 11:59:51 GMT</pubDate></item><item><title><![CDATA[Naming Things]]></title><description><![CDATA[<blockquote>
+  <p>There are only two hard things in Computer Science: cache invalidation and naming things.</p>
+  
+  <p><em>Phil Karlton</em></p>
+</blockquote>
+
+<p>I was thinking about how important naming things is to me. Since the beginning of my undergraduate studies, I paid close attention to the names of every project I've done and every company or lab that I've worked at.</p>
+
+<p>I'm also catching myself arguing about the name of things on my daily work and I was able to notice how bad I am at it. This post aims on forcing me to improve my <em>naming things skill</em>.</p>
+
+<h4 id="regardingprojectnames">Regarding Project names</h4>
+
+<p>The last project we did at <a href='http://globo.com/' >Globo.com</a> had a good name. It's called <em>Sauron</em>, and it's main purpose is to collect and show server's health, QoS/QoE analysis, handle video signals, network throughput, etc. It fits well as <em>Sauron</em> represents himself as an <a href='http://lotr.wikia.com/wiki/Sauron' >all seeing eye</a>. It's short, compact, nerdy, and I like it. </p>
+
+<p>But we have a lot of bad names there: <em>Streams-analyzer</em>, <em>EvoHandler</em> and <em>VMine</em> are just some of then that are too vague or don't really explain what they do (sorry coworkers, don't take it personally).</p>
+
+<p>My undergraduate project was called <a href='http://www.plugmasters.com.br/plugfeed/post/12241/marmota-making-arduino-and-mobile-devices-talk' >Marmota</a>, an acronym for <strong>ma</strong>king <strong>ar</strong>duino and <strong>mo</strong>bile devices <strong>ta</strong>lk that forms the name of a <a href='http://pt.wikipedia.org/wiki/Marmota' >funny animal</a> in Brazilian Portuguese. I don't know if anyone has looked at this fact, but I have no doubt that the name helped on its 15-minutes of fame <a href='https://code.google.com/p/marmota-windows-ce/source/checkout' >[1]</a> <a href='http://mobideia.blogspot.com.br/2009/08/projeto-marmota-controle-carros-de.html' >[2]</a> <a href='http://blogdoje.com.br/2009/08/28/projeto-marmota/' >[3]</a> <a href='http://www.youtube.com/watch?v=1eNJYVT1LQ4' >[4]</a> <a href='http://web.archive.org/web/20091217074102/http://marmota.mobi/' >[5]</a>.</p>
+
+<p>Now I'm trying to engage myself on <a href='http://bem.tv/' >bem.tv</a>, an attempt to scale live video streaming using P2P. Actually, <a href='http://bem.tv/' >bem.tv</a> is another joke with a <a href='http://pt.wikipedia.org/wiki/Bem-te-vi' >bird name</a> and <em>TV</em> suffix, which refers to video broadcast. It's small, simple and easy to say. </p>
+
+<p>Just to name other cool project names that aren't associated to animals but are good ones: <a href='https://github.com/gabrielfalcao/HTTPretty' >HTTPretty</a>, <a href='http://flask.pocoo.org/' >Flask</a>, <a href='http://pypy.org/' >PyPy</a>, <a href='http://www.chromium.org/spdy/spdy-whitepaper' >Spdy</a>, <a href='http://bundler.io/' >Bundle</a>, <a href='http://youtube.com/' >YouTube</a>.</p>
+
+<blockquote>
+  <p>Who would guess -- even amid its barrage of Super Bowl ads -- that Go Daddy is the name of an Internet domain registration site?</p>
+  
+  <p><a href='http://www.washingtonpost.com/wp-dyn/content/article/2007/11/27/AR2007112702321.html' >Paul Farhi</a></p>
+</blockquote>
+
+<p>Yes, you must be thinking about the projects whose names make no sense but they're much bigger and successfull than the ones that I listed. I'm not here judging the formula of success. I'm just concluding that short, solid names that make associations with cool stuff and the project purpose itself is  a good formula. For me, a good logo as <a href='http://bower.io/' >bower</a>, <a href='http://gruntjs.com/' >gruntjs</a> or <a href='http://yeoman.io/' >yeoman</a> also adds value to the project.</p>
+
+<h4 id="regardingcode">Regarding code</h4>
+
+<p>Naming classes, functions and modules are even more complicated. At our office we work with code that interacts with multimedia, and it's common to deal with names that have more than one meaning. <em>Stream</em>, <em>Signal</em>, <em>Media</em> and <em>Bitrate</em> are constantly used in our codes, and those are a constant source of confusion. </p>
+
+<p>For now we don't have a solution for this, but <a href='http://en.wikipedia.org/wiki/Docstring' >docstrings</a> on the code or a small meeting followed by a document describing the decisions and conventions should fix it. Since our projects are growing exponentially, perhaps it's time to schedule this reunion.</p>
+
+<p><a href='http://www.objectmentor.com/omTeam/martin_r.html' >Uncle Bob's</a> <a href='http://www.amazon.com/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882' >Clean Code</a> book have an entire chapter explaining names and how to use and improve it in your code. He defends that names must be pronounceable and searchable, and you as developer should avoid reader's to mentally translate names (avoid mental mapping). </p>
+
+<blockquote>
+  <p>Length is not a virtue in a name; clarity of expression is.</p>
+  
+  <p><a href='http://en.wikipedia.org/wiki/Rob_Pike' >Rob Pike</a></p>
+</blockquote>
+
+<p>I agree that length isn't directly related to self-explanation, and a good trick is look at your language syntactic sugars to improve the readability on the context at where your variable name or function is being used. I'm sure you'll find something to enforce the name you chose.</p>
+
+<p>Once in a while, ask people outside your team to review your code before pushing it to master. They will ask questions that were obvious to you and your teammates, but will alert where you are using bad names. </p>
+
+<p>Outsiders have other context in mind, and their questions will probably improve your code design and names. It's like visual design, information architecture. 4, 6 or 8 eyes is always better than 2.</p>
+
+<p>More References:</p>
+
+<ul>
+<li><a href='http://manypies.paulmorriss.com/2008/04/names-are-important.html' >Names Are Important</a></li>
+<li><a href='http://www.lysator.liu.se/c/pikestyle.html' >Notes on Programming in C</a></li>
+<li><a href='http://www.plugmasters.com.br/plugfeed/post/12241/marmota-making-arduino-and-mobile-devices-talk' >Marmota</a></li>
+<li><a href='http://unethicalblogger.com/2011/11/13/ten-poorly-chosen-gem-names.html' >Ten Poorly chosen Ruby gem names</a></li>
+<li><a href='http://www.codinghorror.com/blog/2007/11/whats-in-a-project-name.html' >What's in a project name?</a></li>
+<li><a href='http://operativewords.blogspot.com.br/2009/06/where-are-most-creative-names.html' >Where are most creative names?</a></li>
+</ul>]]></description><link>http://blog.flavioribeiro.com/naming-things/</link><guid isPermaLink="false">31f80954-4e2a-43f0-b0e6-415bae00c185</guid><dc:creator><![CDATA[Flávio Ribeiro]]></dc:creator><pubDate>Sat, 14 Dec 2013 14:00:00 GMT</pubDate></item></channel></rss>

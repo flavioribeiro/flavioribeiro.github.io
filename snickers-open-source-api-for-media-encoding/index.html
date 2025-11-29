@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+    
+    <title>Snickers: Open Source HTTP API for Media Encoding</title>
+    <meta name="description" content="" />
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="MobileOptimized" content="320" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    
+    <link rel="stylesheet" type="text/css" href="/assets/css/screen.css" />
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic|Open+Sans:700,400" />
+
+    
+    <meta name="generator" content="Ghost 0.3" />
+<link rel="alternate" type="application/rss+xml" title="RSS" href="/rss/">
+</head>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-46289775-1', 'flavioribeiro.com');
+  ga('send', 'pageview');
+
+</script>
+<body class="post-template tag-golang tag-ffmpeg tag-encoding tag-video tag-vod tag-snickers tag-gstreamer">
+
+    
+    
+
+
+
+<main class="content" role="main">
+
+    <article class="post tag-golang tag-ffmpeg tag-encoding tag-video tag-vod tag-snickers tag-gstreamer">
+
+        
+        <header class="post-header">
+            <a id="blog-logo" href="http://blog.flavioribeiro.com">
+                
+                    <img src="/content/images/2015/Dec/logo.png" alt="Blog Logo" />
+                
+            </a>
+        </header>
+
+        
+        
+
+        
+        <span class="post-meta"><time datetime="2016-07-18">18 Jul 2016</time> on golang | ffmpeg | encoding | video | vod | snickers | gstreamer</span>
+
+        <h1 class="post-title">Snickers: Open Source HTTP API for Media Encoding</h1>
+
+        <section class="post-content">
+            <p>At the beginning of this year we created a group on our video engineering team to deal with the ingesting, encoding, publishing and syndication of The New York Times videos. The main goal of the team was to build a pipeline that is vendor agnostic, cloud-based, efficient and elastic. We also wanted to build an easier workflow for video producers in the newsroom and third-party partners who distribute our videos. We named this team <strong>Media Factory</strong>.</p>
+
+<p>After a few months of development, the pipeline is almost ready to be deployed to production.  It consists of three different steps: Content Acquisition, Transcoding and Distribution. The content acquisition part is responsible for receiving ProRes/Raw videos, the transcoding API transforms the source files in playable videos by our supported browsers and devices and the distribution step sends the final videos to our CDN.</p>
+
+<p>Probably the most important and complex part of the pipeline is the transcoding process. Instead of using heavy and expensive hardware for that we decided to create <a href="https://github.com/NYTimes/encoding-wrapper">clients</a> for different encoding services like <a href="http://www.encoding.com/">Encoding.com</a>, <a href="https://aws.amazon.com/elastictranscoder/">Elastic Transcoder</a> and <a href="http://elementaltechnologies.com">Elemental</a>. This enabled us to decide which one to use based on a set of variables such as availability, speed, formats supported (HLS, webm, mp4, DASH, etc) and even cost.</p>
+
+<p>While discussing the design of the pipeline and the integration with cloud services, we thought it would be useful (and FUN!) to implement another provider that would be just a tiny wrapper for <a href="https://ffmpeg.org">FFmpeg</a> or <a href="https://gstreamer.freedesktop.org/">GStreamer</a>. By using this tiny wrapper, we would have the freedom to deploy anywhere, implement new features (such as the generation of thumbnails) and perhaps, one day, be used to encode our lower priority jobs.</p>
+
+<p>We have plans to write a blog post about the details of each step and how they work together on the <a href="http://open.blogs.nytimes.com">Open Blog</a>. We should work on that as soon as we have people at the company using the pipeline.</p>
+
+<h3 id="timetolearnsomego">Time To Learn Some Go</h3>
+
+<p>After having a lot of fun on the <a href="http://open.blogs.nytimes.com/2016/02/08/flash-free-video-in-2016/">journey to remove Flash from our player</a> I got attracted by the chance to be part of this team. I was already willing to work with back-end services again and knowing that the company is <a href="https://www.youtube.com/watch?v=bAQ9ShmXYLY">adopting Go for API's</a> turned this opportunity into something even more attractive. Although I was participating on meetings and design decisions, I actually started working on the team in April.</p>
+
+<p>I had never worked with Go before and after a few years plunged on dynamically typed languages I felt a bit of pain during the first steps working with it. The rest of the team was already fluent and I though I'd need something to exercise myself and keep up with the team's pace. </p>
+
+<p><img src="https://cloud.githubusercontent.com/assets/244265/16903251/00c5f2f8-4c47-11e6-9f2c-9c86bb37f114.png" alt="snickers logo" /></p>
+
+<p>Creating this dummy provider that is a wrapper for FFmpeg seemed like a good chance for me to evolve my Go skills. A month ago I started writting it, I called the project <strong>Snickers</strong>. I put this name because it's my favorite chocolate and I was holding one when I   created the <a href="http://github.com/snickers/snickers">GitHub repository</a>.</p>
+
+<p>To be honest, the title of this post doesn't actually represent the current state of the project. Right now, it looks much more like a proof-of-concept/embryo project than anything else. </p>
+
+<p>It supports the download of sources from <strong>HTTP</strong> and <strong>Amazon S3</strong>, encode them in <strong>H264/MP4</strong> or <strong>VP8/WebM</strong> using a <a href="https://github.com/3d0c/gmf">FFmpeg binding</a> and uploads the results to <strong>Amazon S3</strong>. We  still need a plethora of features to be able to actually call it a Media Encoding API, but one of the purposes of this post is to broadcast the idea and try to engage people to collaborate. <strong>Snickers</strong> already has <a href="https://github.com/snickers/snickers/graphs/contributors">contributors</a>!</p>
+
+<h4 id="nextsteps">Next Steps</h4>
+
+<p>I have a bunch of ideas for this project. The next steps include building clients in JavaScript so people can use <strong>Snickers</strong> directly on the browser (with nice progress bars and stuff) as well as a client in Go, probably as part of the <a href="https://github.com/NYTimes/encoding-wrapper">encoding-wrapper</a> project. We also need to write some glue code for the Transcoding API so <strong>Snickers</strong> can be considered in the decision process of Media Factory pipeline. We use a lot of HLS at the company so HLS support is mandatory and probably the highest priority feature.</p>
+
+<p>I'm also interested in working on the creation of a GStreamer driver for the encoding part so we can have benchmarks using different drivers. I saw that there's already a <a href="https://github.com/ziutek/gst/network">Gstreamer binding</a> for Go and it seems that the code is <a href="https://github.com/ziutek/gst/blob/master/examples/simple.go">simpler</a> than handling libav calls. </p>
+
+<p>You can find some <a href="https://github.com/snickers/snickers/blob/master/README.md">instructions</a> on how to deploy and <a href="https://github.com/snickers/snickers/wiki/How-to-Use-the-API">use the API</a> as well as some <a href="https://github.com/snickers/snickers/tree/master/examples">examples</a>. I also labeled a bunch of relatively <a href="https://github.com/snickers/snickers/issues?q=is%3Aissue+is%3Aopen+label%3Aeasy">easy issues</a> in case you want to work on and be part of this project.</p>
+        </section>
+
+        <footer class="post-footer">
+
+            
+                <section class="author">
+                    <h4>Flávio Ribeiro</h4>
+                    <p>Brazilian Software Engineer, collector of vinyl figure toys and passionate about software development, open source, distributed systems and multimedia.</p>
+                </section>
+            
+
+            <section class="share">
+                <h4>Share this post</h4>
+                <a class="icon-twitter" href="http://twitter.com/share?text=Snickers: Open Source HTTP API for Media Encoding&url=http://blog.flavioribeiro.com/snickers-open-source-api-for-media-encoding/"
+                    onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                    <span class="hidden">Twitter</span>
+                </a>
+                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.flavioribeiro.com/snickers-open-source-api-for-media-encoding/"
+                    onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+                    <span class="hidden">Facebook</span>
+                </a>
+                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://blog.flavioribeiro.com/snickers-open-source-api-for-media-encoding/"
+                   onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+                    <span class="hidden">Google+</span>
+                </a>
+            </section>
+
+        </footer>
+
+        
+<div><hr /></div>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  var disqus_identifier = '';
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </article>
+
+</main>
+
+
+    <footer class="site-footer">
+        <a class="subscribe icon-feed" href="http://blog.flavioribeiro.com/rss/"><span class="tooltip">Subscribe!</span></a>
+        <div class="inner">
+             <section class="social-networks">
+                <a href="http://twitter.com/flavioribeiro">
+                  <img src="https://raw.github.com/recarreira/all_about_you/master/images/icons/fc-webicon-twitter-m.png">
+                </a>
+                <a href="https://foursquare.com/flavioribeiro">
+                  <img src="https://raw.github.com/recarreira/all_about_you/master/images/icons/fc-webicon-foursquare-m.png">
+                </a>
+                <a href="http://br.linkedin.com/in/flavioribeiro">
+                  <img src="https://raw.github.com/recarreira/all_about_you/master/images/icons/fc-webicon-linkedin-m.png">
+                </a>
+                <a href="http://last.fm/user/flaviornb">
+                  <img src="https://raw.github.com/recarreira/all_about_you/master/images/icons/fc-webicon-lastfm-m.png">
+                </a>
+                <a href="http://www.slideshare.net/flavioribeiro/">
+                  <img src="https://raw.github.com/recarreira/all_about_you/master/images/icons/fc-webicon-slideshare-m.png">
+                </a>
+                <a href="http://google.com/+FlávioRibeiroBarbosa">
+                  <img src="https://raw.github.com/recarreira/all_about_you/master/images/icons/fc-webicon-googleplus-m.png">
+                </a>
+                <a href="http://github.com/flavioribeiro">
+                  <img src="https://raw.github.com/recarreira/all_about_you/master/images/icons/fc-webicon-github-m.png">
+                </a>
+                <a href="http://blog.flavioribeiro.com/rss">
+                  <img src="https://raw.github.com/recarreira/all_about_you/master/images/icons/fc-webicon-rss-m.png">
+                </a>
+
+              </section>
+             <section class="copyright">All content copyright <a href="/">Flávio Ribeiro</a> &copy; 2014 &bull; All rights reserved.</section>
+             <section class="poweredby">Proudly published with <a class="icon-ghost" href="http://ghost.org">Ghost</a></section>
+        </div>
+    </footer>
+
+    
+    <script src="/shared/vendor/jquery/jquery.js"></script>
+
+    
+    <script type="text/javascript" src="/assets/js/index.js"></script>
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+
+</body>
+<script type="text/javascript">
+    var disqus_shortname = 'blogflavioribeiro';
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+</html>
